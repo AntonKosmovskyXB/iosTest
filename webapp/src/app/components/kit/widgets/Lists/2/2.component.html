@@ -1,0 +1,12 @@
+<div>
+  <nz-tabset class="tabs" (nzSelectedIndexChange)="changeKey($event)">
+    <nz-tab nzTitle="Alerts"></nz-tab>
+    <nz-tab nzTitle="Events"></nz-tab>
+    <nz-tab nzTitle="Actions"></nz-tab>
+  </nz-tabset>
+  <div class="text-center mb-3 py-4 bg-light rounded">
+    <div *ngIf="activeKey === 0">No Alerts</div>
+    <div *ngIf="activeKey === 1">No Events</div>
+    <div *ngIf="activeKey === 2">No Actions</div>
+  </div>
+</div>

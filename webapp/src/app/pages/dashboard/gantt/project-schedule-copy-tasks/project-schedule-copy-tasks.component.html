@@ -1,0 +1,54 @@
+<div class="card" [ngClass]="isModalInput?'':'d-sm-inline-flex list-min-width'">
+  <div class="card-header card-header-flex" *ngIf="!isModalInput">
+    <div class="d-flex flex-column justify-content-center mr-auto">
+      <div class="text-dark font-weight-bold font-size-18">{{ PageTitle }}</div>
+    </div>
+  </div>
+  <div class="card-body">
+    <app-instruction *ngIf="taskGroupIdsInput" [statusInput]="1"
+      [contentInput]="'Enter a Project Start Date, Select a Template, then Save.'"></app-instruction>
+    <div class="form-group form-inline">
+      <input *ngIf="!taskGroupIdsInput" nz-input placeholder="Title" [(ngModel)]="title" class="w-50 mr-3">
+      <nz-date-picker placeholder="Project Start Date" [(ngModel)]="projectStartDate" [nzFormat]="'dd-MMM-yy'">
+      </nz-date-picker>
+    </div>
+    <app-instruction *ngIf="!taskGroupIdsInput" [statusInput]="1"
+      [contentInput]="'Copy Tasks From'"></app-instruction>
+    <div class="kit__utils__table">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Title</th>
+            <th scope="col">Created By</th>
+            <th scope="col">Created On</th>
+            <th scope="col">Task Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of templates">
+            <td class="align-middle"><label nz-checkbox [(ngModel)]="item.Checked"
+                (ngModelChange)="updateItemChecked($event, item.TaskGroupId)"></label></td>
+            <td class="align-middle text-nowrap">
+              <ngb-highlight [result]="item.Title"></ngb-highlight>
+            </td>
+            <td class="align-middle text-nowrap">
+              <ngb-highlight [result]="item.CreatedBy"></ngb-highlight>
+            </td>
+            <td class="align-middle text-nowrap">
+              <ngb-highlight [result]="item.CreatedOn | datePattern : 'both'"></ngb-highlight>
+            </td>
+            <td class="align-middle">
+              <ngb-highlight [result]="item.TaskCount"></ngb-highlight>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <app-list-status [listStatus]=listStatus.asObservable()></app-list-status>
+  </div>
+  <div class="card-footer text-right">
+    <button type="button" nz-button nzType="primary" (click)="save()" [disabled]="!isEnableSave">Save</button>
+    <button type="button" *ngIf="!isModalInput" class="ml-3" nz-button (click)="cancel()">Cancel</button>
+  </div>
+</div>

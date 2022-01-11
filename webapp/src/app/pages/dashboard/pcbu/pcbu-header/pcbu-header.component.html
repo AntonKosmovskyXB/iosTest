@@ -1,0 +1,36 @@
+<div class="card form-width">
+    <div class="card-header card-header-flex">
+        <div class="d-flex flex-column justify-content-center mr-auto">
+          <div class="text-dark font-weight-bold font-size-18">{{ pageTitleInput }}</div>
+        </div>
+        <div class="d-flex flex-column justify-content-center" *ngIf="CanEditPCBU && idInput">
+          <a [routerLink]="['/home/pcbu/checklist-setup/', idInput]" nzType="link" class="text-blue font-size-18"><i class="fe fe-settings"></i> Setup</a>
+        </div>
+    </div>
+    <div class="card-body">
+      <div class="d-flex align-items-center">
+        <span class="font-weight-bold">
+          For:&nbsp;
+        </span>
+        <span>
+          {{ pcbuHeader.Contractor }} - {{ pcbuHeader.Contact }}
+        </span>
+      </div>
+      <div class="d-flex align-items-center mt-2 mb-2">
+        <span class="font-weight-bold">
+          Project:&nbsp;
+        </span>
+        <span>
+          {{ pcbuHeader.SiteName }}, {{ pcbuHeader.SiteLocation }}
+        </span>
+      </div>
+      <div class="d-flex align-items-center">
+        <span class="font-weight-bold">
+          Principal:&nbsp;
+        </span>
+        <span>
+          {{ pcbuHeader.Principal }}
+        </span>
+      </div>
+    </div>
+</div>

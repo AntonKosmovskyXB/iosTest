@@ -1,0 +1,50 @@
+<div>
+  <div class="text-center mb-5">
+    <h1 class="mb-5 px-3">
+      <strong>Welcome to {{logo}}</strong>
+    </h1>
+   
+  </div>
+  <div *ngIf="tokenLogin" class="card boxContainer">
+    <nz-spin [nzSpinning]="tokenLoginResult.processing" [nzDelay]="500">
+      <nz-alert [nzType]="'info'" [nzMessage]="tokenLoginResult.message">
+      </nz-alert>
+    </nz-spin>
+  </div>
+  <div *ngIf="!tokenLogin" class="card boxContainer">
+    <div class="text-dark font-size-24 mb-3">
+      <strong>Sign in to your account</strong>
+    </div>
+    
+    <form nz-form [nzLayout]="'vertical'" [formGroup]="form" (ngSubmit)="submitForm()" role="form">
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please enter your UserId or email address!">
+          <input type="text" nz-input formControlName="email" nzSize="large" placeholder="User" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control nzErrorTip="Please input your Password!">
+          <input type="password" nz-input nzSize="large" formControlName="password" placeholder="Password" />
+        </nz-form-control>
+      </nz-form-item>
+      <nz-form-item>
+        <nz-form-control>
+          <button nz-button nzType="primary" [nzSize]="'large'" [nzLoading]="loading" class="text-center w-100">
+            <strong> Log in</strong>
+          </button>
+        </nz-form-control>
+      </nz-form-item>
+    </form>
+    <a routerLink="/auth/forgot-password" class="kit__utils__link font-size-18">
+      Forgot password?
+    </a>
+    <div class="d-flex flex-container-content-center mt-5" *ngIf="installPrompt">
+      <span>
+        <i nz-icon nzType="link" nzTheme="outline"></i>
+        <button  (click)="installAppLink()" nz-button nzType="default" [nzSize]="'large'" class="text-center w-100">
+          Add Link to your Phone
+        </button>
+      </span>
+    </div>
+  </div>
+</div>

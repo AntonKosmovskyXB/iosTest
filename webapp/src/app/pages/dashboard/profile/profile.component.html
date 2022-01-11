@@ -1,0 +1,53 @@
+<div class="card form-width">
+  <div class="card-header card-header-flex flex-column">
+    <div class="d-flex flex-column justify-content-center mr-auto">
+      <div>&nbsp;</div>
+      <div class="text-dark font-weight-bold font-size-18">{{ userFullName }}</div>
+      <div class="text-gray-6"><i class="fe fe-mail"></i> {{ user.Email }}</div>
+      <div class="text-gray-6"><i class="fe fe-phone"></i> {{ user.Phone }}</div>
+    </div>
+    <nz-tabset class="kit-tabs kit-tabs-bold" (nzSelectedIndexChange)="changeKey($event)">
+      <nz-tab nzTitle="Details"></nz-tab>
+    </nz-tabset>
+  </div>
+  <div class="card-body">
+    <div *ngIf="activeKey === 0">
+      <form nz-form [formGroup]="form" (ngSubmit)="submitForm()">
+        <nz-form-item class="bottom-margin-0">
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="firstName">First Name</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your First name!">
+            <input nz-input placeholder="First Name" id="firstName" formControlName="firstName">
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="bottom-margin-0">
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="lastName">Last Name</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input your Last name!">
+            <input nz-input placeholder="Lastname" id="lastName" formControlName="lastName">
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="bottom-margin-0">
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="email">Email</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Please input a valid email address!">
+            <input nz-input placeholder="Email" id="email" formControlName="email">
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="bottom-margin-0">
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="phone">Phone</nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" nzErrorTip="Phone number is required">
+            <input nz-input placeholder="Phone" id="phone" formControlName="phone">
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item class="bottom-margin-0">
+          <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="showInstructions" [nzNoColon]="true"></nz-form-label>
+          <nz-form-control [nzSm]="14" [nzXs]="24" >
+            <label nz-checkbox id="showInstructions" formControlName="showInstructions">Show Instructions</label>
+          </nz-form-control>
+        </nz-form-item>
+        <div class="form-actions btn-rpos">
+          <button nz-button [nzType]="'primary'" class="mr-3" [nzLoading]="loading">Save</button>
+          <button nz-button type="button" onclick="javascript:window.history.back()">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

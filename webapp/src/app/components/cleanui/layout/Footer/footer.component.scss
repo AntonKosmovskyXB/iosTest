@@ -1,0 +1,76 @@
+@import 'src/app/components/mixins.scss';
+
+.footer {
+  margin: 0 auto;
+  padding: 0 rem(5) rem(5);
+}
+
+.footerInner {
+  border-top: 1px solid $border;
+  padding-top: rem(5);
+  text-align: center;
+}
+.footerLogo,
+.logo {
+  color: $black;
+  font-size: rem(17);
+  span {
+    display: inline-block;
+    height: rem(13);
+    width: rem(13);
+    background: $black;
+    border-radius: 20px;
+    margin-left: rem(8);
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
+  }
+}
+
+.logo {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -1px;
+}
+
+// dark theme
+:host-context([data-kit-theme='dark']) {
+  .footer {
+    color: $dark-gray-1;
+  }
+
+  .footerInner {
+    border-top: 1px solid $dark-gray-4;
+  }
+
+  .logo {
+    color: $dark-gray-1;
+    &:hover {
+      color: $primary;
+    }
+    span {
+      background: $dark-gray-1;
+    }
+  }
+}
+
+.fixed-footer {
+  left: 0;
+  bottom: 0rem;
+  width: 100%;
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  flex-flow: column;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  background: #fff;
+}
+
+@media (min-width: 320px) and (max-width: 767px) {
+  fixed-footer {
+    position: fixed;
+  }
+}

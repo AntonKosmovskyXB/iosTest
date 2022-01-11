@@ -1,0 +1,83 @@
+<div class="card" [ngClass]="isModalInput?'':'d-sm-inline-flex list-min-width'">
+    <div class="card-header card-header-flex">
+        <div class="d-flex flex-column justify-content-center mr-auto">
+            <app-page-header [titleInput]="'Contacts'" [jobInput]="job"></app-page-header>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="form-group form-inline">
+            <div class="d-flex justify-content-left align-items-center">
+                <nz-input-group [nzPrefix]="prefixTemplate">
+                    <input type="text" nz-input placeholder="Search" name="searchTerm"
+                        [(ngModel)]="service.searchTerm" (keydown.enter)="goSearch()"/>
+                </nz-input-group>
+                <ng-template #prefixTemplate><i nz-icon nzType="search"></i></ng-template>
+            </div>
+            <button type="submit" nz-button (click)="goSearch()" nzType="primary" [nzLoading]="loading$ | async">Go</button>
+            <label nz-checkbox [(ngModel)]="showWorkers" (ngModelChange)="goSearch()" class="ml-3">Show Workers</label>
+        </div>
+        <div class="kit__utils__table">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th class="align-middle" scope="col">
+                            <label nz-checkbox [(ngModel)]="isAllChecked"
+                                (ngModelChange)="updateAllChecked($event)"></label>
+                        </th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Company Name</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Position</th>
+                        <th scope="col">Phone</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let contact of contactList$ | async" [ngClass]="contact.Contact == 1 ? 'font-weight-bold' : ''">
+                        <td class="align-middle">
+                            <label nz-checkbox [(ngModel)]="contact.Checked"></label>
+                        </td>
+                        <td class="align-middle">
+                            <ngb-highlight [result]="contact.Name"></ngb-highlight>
+                        </td>
+                        <td class="align-middle">
+                            <ngb-highlight [result]="contact.CompanyName"></ngb-highlight>
+                        </td>
+                        <td class="align-middle">
+                            <ngb-highlight [result]="contact.Email"></ngb-highlight>
+                        </td>
+                        <td class="align-middle">
+                            <ngb-highlight [result]="contact.Position"></ngb-highlight>
+                        </td>
+                        <td class="align-middle">
+                            <ngb-highlight [result]="contact.Phone"></ngb-highlight>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <app-list-status [listStatus]=listStatus.asObservable()></app-list-status>
+    </div>
+    <div class="card-footer">
+        <div class="d-flex flex-wrap justify-content-between p-2" *ngIf="service.total > 10">
+            <ngb-pagination [collectionSize]="service.total" [maxSize]="service.maxSize" (pageChange)="pageSkipChange($event)"
+                [pageSize]="service.pageSize">
+            </ngb-pagination>
+
+            <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize"
+                (ngModelChange)="pageSizeChange()">
+                <option [ngValue]="10">10 items per page</option>
+                <option [ngValue]="20">20 items per page</option>
+                <option [ngValue]="50">50 items per page</option>
+                <option [ngValue]="100">100 items per page</option>
+                <option [ngValue]="200">200 items per page</option>
+                <option [ngValue]="300">300 items per page</option>
+                <option [ngValue]="400">400 items per page</option>
+                <option [ngValue]="500">500 items per page</option>
+            </select>
+        </div>
+        <div class="d-flex flex-wrap btn-rpos p-2">
+            <button nzType="primary" nz-button (click)="save()">Save</button>
+            <button type="button" nz-button (click)="cancel()" class="ml-3">Cancel</button>
+        </div>
+    </div>
+</div>

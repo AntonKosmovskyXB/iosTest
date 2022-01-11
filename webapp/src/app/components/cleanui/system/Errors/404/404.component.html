@@ -1,0 +1,25 @@
+<div class="card boxContainer">
+  <div class="card-header">
+    <div class="text-dark font-size-24">
+      <strong>Request Error</strong>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="mb-4">
+      <p class="text-dark font-size-21 ">
+        Something went wrong with the request
+      </p>
+    </div>
+    <div class="text-center">
+      <a routerLink="/auth/login" class="btn btn-outline-default  mr-5">
+        Log in
+      </a>
+      <a [routerLink]="request" class="btn btn-outline-success mr-5">
+        Retry
+      </a>
+    </div>
+  </div>
+  <div class="card-footer text-center text-muted text-small">
+    {{request}}
+  </div>
+</div>

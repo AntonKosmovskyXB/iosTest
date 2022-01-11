@@ -1,0 +1,36 @@
+/**
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/LICENSE
+ */
+import { Platform } from '@angular/cdk/platform';
+import { ChangeDetectorRef, ElementRef, EventEmitter, OnChanges } from '@angular/core';
+import { NzConfigService } from 'ng-zorro-antd/core/config';
+import { NgClassInterface, NgStyleInterface, NzShapeSCType, NzSizeLDSType } from 'ng-zorro-antd/core/types';
+export declare class NzAvatarComponent implements OnChanges {
+    nzConfigService: NzConfigService;
+    private elementRef;
+    private cdr;
+    private platform;
+    nzShape: NzShapeSCType;
+    nzSize: NzSizeLDSType | number;
+    nzText?: string;
+    nzSrc?: string;
+    nzSrcSet?: string;
+    nzAlt?: string;
+    nzIcon?: string;
+    readonly nzError: EventEmitter<Event>;
+    hasText: boolean;
+    hasSrc: boolean;
+    hasIcon: boolean;
+    textStyles: NgStyleInterface;
+    classMap: NgClassInterface;
+    customSize: string | null;
+    textEl?: ElementRef;
+    private el;
+    constructor(nzConfigService: NzConfigService, elementRef: ElementRef, cdr: ChangeDetectorRef, platform: Platform);
+    imgError($event: Event): void;
+    ngOnChanges(): void;
+    private calcStringSize;
+    private notifyCalc;
+    private setSizeStyle;
+}

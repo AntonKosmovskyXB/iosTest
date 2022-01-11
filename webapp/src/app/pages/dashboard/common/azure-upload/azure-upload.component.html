@@ -1,0 +1,17 @@
+<div *ngFor="let uploadItem of uploadItems">
+  <div>
+    {{ uploadItem.File.name }}
+    <nz-spin *ngIf="uploadItem.Status == -1" nzSimple [nzSize]="'small'"></nz-spin>
+    <a *ngIf="!isUploading && uploadItem.Status != 1" nz-button nzType="link" (click)="unselect(uploadItem)">Unselect</a>
+    <img class="ml-3 mr-3" [src]="uploadItem.Status | inductionIcon">
+  </div>
+  <div class="text-red">{{ uploadItem.Error }}</div>
+</div>
+<div class="uploadfilecontainer" (click)="fileInput.click()" *ngIf="!isUploading && !(!isAllowMultipleInput && uploadItems.length > 0)">
+  <div>
+    <div class="text-blue text-center font-size-24"><i class="fe fe-upload"></i></div>
+    <div class="text-dark text-center font-size-16">Click or drag file to this area to upload</div>
+    <div class="text-black-50 text-center mt-2">Support for a single or bulk upload.</div>
+    <input #fileInput type="file" [multiple]="isAllowMultipleInput" (change)="onSelected(fileInput.files)" hidden>
+  </div>
+</div>

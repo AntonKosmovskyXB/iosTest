@@ -1,0 +1,214 @@
+<div id="tools_single" class="d-flex align-items-center w-100 tools-single">
+    <span class="flex-grow-1">
+        <span class="ml-2 mr-2">{{ PageTitle | truncate }}</span>
+        <button nz-button nzShape="round" (click)="undo()" class="ml-2 mr-2">
+            <i nz-icon nzType="undo"></i>
+        </button>
+        <button nz-button nzShape="round" (click)="redo()" class="mr-2">
+            <i nz-icon nzType="redo"></i>
+        </button>
+        <button nz-button nzShape="round" (click)="zoomIn()" class="mr-2">
+            <i nz-icon nzType="plus"></i>
+        </button>
+        <button nz-button nzShape="round" (click)="zoomOut()" class="mr-2">
+            <i nz-icon nzType="minus"></i>
+        </button>
+        <button nz-button nzShape="round" (click)="fullScreen()" class="mr-2">
+            <i nz-icon nzType="expand"></i>
+        </button>
+        <button nz-button nzShape="round" class="mr-2" nz-dropdown [nzDropdownMenu]="settingMenu">
+            <i nz-icon nzType="setting"></i>
+        </button>
+        <nz-dropdown-menu #settingMenu="nzDropdownMenu">
+            <ul nz-menu>
+                <li nz-menu-item (click)="saveDefaults()"><i nz-icon nzType="save"></i>Save Defaults</li>
+                <li nz-menu-item (click)="restoreDefaults()"><i nz-icon nzType="rollback"></i>Restore Defaults</li>
+                <li nz-menu-item>
+                    <label nz-checkbox [(ngModel)]="settings.ShowGantt" (ngModelChange)="showGanttChange(true)">Gantt</label>
+                </li>
+                <li nz-submenu nzTitle="Columns">
+                    <ul>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowID" (ngModelChange)="showColumnChange(0,true)">ID</label>
+                        </li>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowStatus" (ngModelChange)="showColumnChange(1,true)">Status</label>
+                        </li>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowTaskName" (ngModelChange)="showColumnChange(2,true)">Task Name</label>
+                        </li>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowStart" (ngModelChange)="showColumnChange(3,true)">Forecast</label>
+                        </li>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowConfirmed" (ngModelChange)="showColumnChange(4,true)">Booked</label>
+                        </li>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowCC" (ngModelChange)="showColumnChange(5,true)">CC</label>
+                        </li>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowResource" (ngModelChange)="showColumnChange(6,true)">Resource</label>
+                        </li>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowDays" (ngModelChange)="showColumnChange(7,true)">Days</label>
+                        </li>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowProgress" (ngModelChange)="showColumnChange(8,true)">Progress</label>
+                        </li>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowPredecessors" (ngModelChange)="showColumnChange(9,true)">Predecessors</label>
+                        </li>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowSuccessors" (ngModelChange)="showColumnChange(10,true)">Successors</label>
+                        </li>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowAdd" (ngModelChange)="showColumnChange(11,true)">Add</label>
+                        </li>
+                    </ul>
+                </li>
+                <li nz-submenu nzTitle="Display">
+                    <ul>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowContractedCompletionDate" (ngModelChange)="showContractedCompletionDateChange(true)">Contracted Completion Date</label>
+                        </li>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowCompletedTasks" (ngModelChange)="refreshData()">Completed Tasks</label>
+                        </li>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowCriticalPath" (ngModelChange)="showCriticalPathChange(true)">Critical Path</label>
+                        </li>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowDependencyLines" (ngModelChange)="showDependencyLinesChange(true)">Dependency Lines</label>
+                        </li>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowBaselines" (ngModelChange)="showBaselinesChange(true)">Baselines</label>
+                        </li>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowAnchors" (ngModelChange)="showAnchorsChange(true)">Anchors</label>
+                        </li>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowRightSideText" (ngModelChange)="showRightSideTextChange(true)">Right Side Text</label>
+                        </li>
+                        <li nz-menu-item>
+                            <label nz-checkbox [(ngModel)]="settings.ShowHolidays" (ngModelChange)="showHolidaysChange(true)">Holidays</label>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nz-dropdown-menu>
+        <button nz-button nzShape="round" class="mr-2" nz-dropdown [nzDropdownMenu]="moreMenu">
+            <i nz-icon nzType="more"></i>
+        </button>
+        <nz-dropdown-menu #moreMenu="nzDropdownMenu">
+            <ul nz-menu>
+                <li nz-menu-item (click)="expand()">Expand All</li>
+                <li nz-menu-item (click)="collapse()">Collapse All</li>
+                <li nz-menu-item (click)="setBaselines()">Set Baselines</li>
+                <li nz-menu-item (click)="clearBaselines()">Clear Baselines</li>
+                <li nz-menu-item (click)="clearAnchors()">Clear Anchors</li>
+                <li nz-menu-item (click)="save(true,6)">Resource Gantt</li>
+                <li nz-menu-item (click)="fileInput.click()" *ngIf="!jsLoading">Import MS-Project</li>
+                <li nz-menu-item (click)="pdf()" *ngIf="!jsLoading">Export PDF</li>
+                <li nz-menu-item (click)="save(true,3)">Task Report</li>
+                <li nz-menu-item (click)="save(true,5)">Copy Tasks</li>
+                <li nz-menu-item (click)="delete()" *ngIf="access.canDeleteProjectSchedule">Delete All Tasks</li>
+                <li nz-menu-item (click)="save(true,4)" *ngIf="access.canAddProjectSchedule">Save as Template</li>
+                <li nz-menu-item (click)="setHolidayModalVisible(true)" *ngIf="access.canViewHolidays">Holidays</li>
+            </ul>
+        </nz-dropdown-menu>
+        <button nz-button nzShape="round" class="mr-2" nz-dropdown [nzDropdownMenu]="viewMenu">
+            View
+            <i nz-icon nzType="down"></i>
+        </button>
+        <nz-dropdown-menu #viewMenu="nzDropdownMenu">
+            <ul nz-menu>
+                <li nz-menu-item (click)="changeView(0)">Day</li>
+                <li nz-menu-item (click)="changeView(1)">Week</li>
+                <li nz-menu-item (click)="changeView(2)">Month</li>
+                <li nz-menu-item (click)="changeView(3)">Year</li>
+            </ul>
+        </nz-dropdown-menu>
+        <span>
+            <input class="search" type="text" nz-input placeholder="Search" [(ngModel)]="searchTerm" (keydown.enter)="refreshData()"/>
+            <button nz-button (click)="refreshData()">
+                <i nz-icon nzType="search"></i>
+            </button>
+        </span>
+    </span>
+    <label nz-checkbox class="mr-2" [(ngModel)]="settings.AutoSave" (ngModelChange)="autoSaveChange()"></label>
+    <button nz-button nzType="primary" nzShape="round" (click)="save(true,0)" class="mr-2" [nzLoading]="saveLoading" nzGhost onclick="this.blur();">
+        {{ SaveContinueTitle }}
+    </button>
+    <button nz-button nzType="primary" nzShape="round" (click)="save(false,0)" class="mr-2" [nzLoading]="saveLoading">
+        Save & Exit
+        <i nz-icon nzType="save"></i>
+    </button>
+    <button nz-button nzShape="round" (click)="cancel()" class="mr-2">
+        Cancel
+        <i nz-icon nzType="close"></i>
+    </button>
+</div>
+<div #gantt_single class="gantt-chart-single" [ngStyle]="ContentLayout"></div>
+<input #fileInput accept=".mpp" type="file" (change)="onSelected(fileInput.files)" hidden>
+<nz-modal
+    nzWidth="848"
+    [nzStyle]="{ top: '0px' }"
+    *ngIf="isTaskDetailsModalVisible"
+    [(nzVisible)]="isTaskDetailsModalVisible"
+    nzTitle="Task Details"
+    [nzFooter]="emptyModalFooter"
+    (nzOnCancel)="taskDetailsEmitter()">
+    <app-project-schedule-task-details [taskIdInput]="selectedTask.task_id" [jobIdInput]="jobId" (taskDetailsOutput)="taskDetailsEmitter()"></app-project-schedule-task-details>
+</nz-modal>
+<nz-modal
+    nzWidth="898"
+    [nzStyle]="{ top: '0px' }"
+    *ngIf="isEmailModalVisible"
+    [(nzVisible)]="isEmailModalVisible"
+    nzTitle="Email"
+    [nzFooter]="emptyModalFooter"
+    (nzOnCancel)="setEmailModalVisible(false)">
+    <app-project-email-draft [isModalInput]=true [jobId]="jobId" (draftOuput)="setEmailModalVisible(false)"></app-project-email-draft>
+</nz-modal>
+<nz-modal
+    [nzStyle]="{ top: '0px' }"
+    nzWidth="848"
+    *ngIf="isCopyModalVisible"
+    [(nzVisible)]="isCopyModalVisible"
+    nzTitle="Copy Tasks"
+    [nzFooter]="emptyModalFooter"
+    (nzOnCancel)="setCopyModalVisible(false)">
+    <app-project-schedule-copy-tasks [isModalInput]=true [taskGroupTypeIdInput]="1" [taskGroupIdsInput]="TaskGroupIds" [modeInput]="1" (copyTasksOutput)="copyTasksEmitter($event)"></app-project-schedule-copy-tasks>
+</nz-modal>
+<nz-modal
+    [nzStyle]="{ top: '0px' }"
+    *ngIf="isSaveAsTemplateModalVisible"
+    [(nzVisible)]="isSaveAsTemplateModalVisible"
+    nzTitle="Save as Template"
+    nzOkText="Save"
+    (nzOnCancel)="setSaveAsTemplateModalVisible(false)"
+    (nzOnOk)="saveAsTemplate()">
+    <nz-form-item class="bottom-margin-0">
+        <nz-form-label [nzSm]="6" [nzXs]="24">Title</nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+            <input nz-input placeholder="Title" [(ngModel)]="saveAsTemplateTitle">
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item class="bottom-margin-0">
+        <nz-form-label [nzSm]="6" [nzXs]="24" [nzNoColon]="true"></nz-form-label>
+        <nz-form-control [nzSm]="14" [nzXs]="24">
+          <label nz-checkbox [(ngModel)]="saveAsTemplateCopyResources">Copy Resources</label>
+        </nz-form-control>
+    </nz-form-item>
+</nz-modal>
+<nz-modal
+    nzWidth="1163.86"
+    [nzStyle]="{ top: '0px' }"
+    *ngIf="isHolidayModalVisible"
+    [(nzVisible)]="isHolidayModalVisible"
+    nzTitle="Holidays"
+    [nzFooter]="emptyModalFooter"
+    (nzOnCancel)="setHolidayModalVisible(false)">
+    <app-holiday-content [isModalInput]=true [jobIdInput]="jobId"></app-holiday-content>
+</nz-modal>
+<ng-template #emptyModalFooter></ng-template>

@@ -1,0 +1,19 @@
+/**
+ * @fileoverview added by tsickle
+ * Generated from: public-api.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/LICENSE
+ */
+export { NzTreeModule } from './tree.module';
+export { NzTreeServiceFactory, NzTreeComponent } from './tree.component';
+export { NzTreeNodeComponent } from './tree-node.component';
+export { NzTreeIndentComponent } from './tree-indent.component';
+export { NzTreeService } from './tree.service';
+export { NzTreeNodeSwitcherComponent } from './tree-node-switcher.component';
+export { NzTreeNodeCheckboxComponent } from './tree-node-checkbox.component';
+export { NzTreeNodeTitleComponent } from './tree-node-title.component';
+export { NzTreeNode } from 'ng-zorro-antd/core/tree';
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHVibGljLWFwaS5qcyIsInNvdXJjZVJvb3QiOiJuZzovL25nLXpvcnJvLWFudGQvdHJlZS8iLCJzb3VyY2VzIjpbInB1YmxpYy1hcGkudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7O0FBS0EsNkJBQWMsZUFBZSxDQUFDO0FBQzlCLHNEQUFjLGtCQUFrQixDQUFDO0FBQ2pDLG9DQUFjLHVCQUF1QixDQUFDO0FBQ3RDLHNDQUFjLHlCQUF5QixDQUFDO0FBQ3hDLDhCQUFjLGdCQUFnQixDQUFDO0FBQy9CLDRDQUFjLGdDQUFnQyxDQUFDO0FBQy9DLDRDQUFjLGdDQUFnQyxDQUFDO0FBQy9DLHlDQUFjLDZCQUE2QixDQUFDO0FBQzVDLE9BQU8sRUFBaUUsVUFBVSxFQUFFLE1BQU0seUJBQXlCLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIFVzZSBvZiB0aGlzIHNvdXJjZSBjb2RlIGlzIGdvdmVybmVkIGJ5IGFuIE1JVC1zdHlsZSBsaWNlbnNlIHRoYXQgY2FuIGJlXG4gKiBmb3VuZCBpbiB0aGUgTElDRU5TRSBmaWxlIGF0IGh0dHBzOi8vZ2l0aHViLmNvbS9ORy1aT1JSTy9uZy16b3Jyby1hbnRkL2Jsb2IvbWFzdGVyL0xJQ0VOU0VcbiAqL1xuXG5leHBvcnQgKiBmcm9tICcuL3RyZWUubW9kdWxlJztcbmV4cG9ydCAqIGZyb20gJy4vdHJlZS5jb21wb25lbnQnO1xuZXhwb3J0ICogZnJvbSAnLi90cmVlLW5vZGUuY29tcG9uZW50JztcbmV4cG9ydCAqIGZyb20gJy4vdHJlZS1pbmRlbnQuY29tcG9uZW50JztcbmV4cG9ydCAqIGZyb20gJy4vdHJlZS5zZXJ2aWNlJztcbmV4cG9ydCAqIGZyb20gJy4vdHJlZS1ub2RlLXN3aXRjaGVyLmNvbXBvbmVudCc7XG5leHBvcnQgKiBmcm9tICcuL3RyZWUtbm9kZS1jaGVja2JveC5jb21wb25lbnQnO1xuZXhwb3J0ICogZnJvbSAnLi90cmVlLW5vZGUtdGl0bGUuY29tcG9uZW50JztcbmV4cG9ydCB7IE56VHJlZU5vZGVPcHRpb25zLCBOekZvcm1hdEVtaXRFdmVudCwgTnpGb3JtYXRCZWZvcmVEcm9wRXZlbnQsIE56VHJlZU5vZGUgfSBmcm9tICduZy16b3Jyby1hbnRkL2NvcmUvdHJlZSc7XG4iXX0=

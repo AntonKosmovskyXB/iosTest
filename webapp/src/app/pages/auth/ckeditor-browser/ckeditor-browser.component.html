@@ -1,0 +1,12 @@
+<div class="items">
+  <div class="mini-item" *ngFor="let item of media">
+    <div class="mini-itemContent">
+      <div class="itemControl">
+        <div class="itemControlContainer">
+          <button type="button" nz-button nzType="primary" (click)="select(item)"><i nz-icon nzType="check"></i></button>
+        </div>
+      </div>
+      <img [src]="item"/>
+    </div>
+  </div>
+</div>

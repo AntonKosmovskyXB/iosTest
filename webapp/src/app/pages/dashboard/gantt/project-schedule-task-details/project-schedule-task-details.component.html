@@ -1,0 +1,9 @@
+<div *ngIf="taskDetails">
+    <nz-tabset (nzSelectedIndexChange)="changeKey($event)">
+        <nz-tab nzTitle="Details"></nz-tab>
+        <nz-tab nzTitle="Orders" [nzDisabled]="!taskDetails.JobId"></nz-tab>
+    </nz-tabset>
+    <app-project-schedule-edit-task [taskDetailsInput]="taskDetails" [jobIdInput]="jobIdInput" (refreshTaskOutput)="refreshTaskEmitter()" (closeTaskOutput)="closeTaskEmitter()" *ngIf="activeKey == 0"></app-project-schedule-edit-task>
+    <app-ords [isModalInput]=true [jobId]="taskDetails.JobId" *ngIf="activeKey == 1"></app-ords>
+</div>
+<nz-spin *ngIf="!taskDetails" nzTip="Loading..."></nz-spin>

@@ -1,0 +1,8 @@
+<nz-form-item class="bottom-margin-0">
+    <nz-form-label [nzSm]="isOutsideFormInput?0:6" [nzXs]="isOutsideFormInput?0:24">{{titleInput}}</nz-form-label>
+    <nz-form-control [nzSm]="isOutsideFormInput?0:14" [nzXs]="isOutsideFormInput?0:24">
+         <nz-select [ngClass]="isOutsideFormInput ? 'w-100' : 'w-75'" (ngModelChange)="onChange($event)" [(ngModel)]="emailTemplateIdInput">
+            <nz-option *ngFor="let item of emailTemplates" [nzValue]="item.EmailTemplateId" [nzLabel]="item.TemplateName"></nz-option>
+        </nz-select>
+    </nz-form-control>
+</nz-form-item>

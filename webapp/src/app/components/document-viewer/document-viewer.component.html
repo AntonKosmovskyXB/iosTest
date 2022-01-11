@@ -1,0 +1,21 @@
+<nz-modal 
+    nzWidth="100%" 
+    [nzStyle]="{ top: '0px' }" 
+    *ngIf="isVisible" 
+    [(nzVisible)]="isVisible"
+    nzTitle="Document Viewer"
+    nzOkText="Download"
+    (nzOnCancel)="cancel()"
+    (nzOnOk)="download()">
+    <div class="text-right">
+        <button type="button" class="btn btn-primary" (click)="download()">
+            <i class="fe fe-download"></i>
+        </button>
+    </div>
+    <div *ngIf="loading"><nz-spin nzTip="Loading..." [nzSize]="large"></nz-spin></div>
+    <iframe *ngIf="IsWeb" style="width:100%;height:59vh;" [src]="content.Url | safe"></iframe>
+    <mat-video *ngIf="IsVideo" [src]="content.Url"></mat-video>
+    <pre *ngIf="IsTxt">{{ txtContent }}</pre>
+    <pdf-viewer *ngIf="IsPdf" show-all="false" fit-to-page="true" [render-text]="true"(after-load-complete)="finishLoading()" style="display: block;" [src]="content.Url"></pdf-viewer>
+    <ngx-doc-viewer *ngIf="IsOffice" viewer="office" style="width:100%;height:59vh;" [url]="content.Url"></ngx-doc-viewer>
+</nz-modal>

@@ -1,0 +1,199 @@
+<div class="form-group form-inline">
+  <div class="d-flex justify-content-left align-items-center">
+    <nz-input-group [nzPrefix]="prefixTemplate">
+      <input type="text" nz-input placeholder="Search" name="searchTerm" [(ngModel)]="searchTerm" (ngModelChange)="filterOriginalList()"/>
+    </nz-input-group>
+    <ng-template #prefixTemplate><i nz-icon nzType="search"></i></ng-template>
+    <a nz-button nzType="link" (click)="advancedSearching(!advancedSearch)" *ngIf="showAdvancedSearch"> {{advancedSearch?'Hide Advanced
+      Search':'Advanced Search'}}</a>
+  </div>
+  <label nz-checkbox [(ngModel)]="currentOnly" (ngModelChange)="currentFilter()" class="ml-3" *ngIf="showCheckbox">Show Current Only</label>
+  <label nz-checkbox [(ngModel)]="companyOnly" (ngModelChange)="filterOriginalList()" class="ml-3" *ngIf="showCheckbox && showAdvancedSearch">Show My company documents only  </label>
+</div>
+<div *ngIf="advancedSearch">
+  <div class="row align-items-center mb-3">
+    <div class="col-xl-3 col-lg-12">
+      <span>Search by Company Name</span>
+      <input type="text" nz-input placeholder="Company Name" name="companyName" [(ngModel)]="companyName" (ngModelChange)="filterOriginalList()"/>
+    </div>
+    <div class="col-xl-3 col-lg-12">
+      <span>Search by Revision</span>
+      <input type="text" nz-input placeholder="Revision" name="revision" [(ngModel)]="revision" (ngModelChange)="filterOriginalList()"/>
+    </div>
+    <div class="col-xl-3 col-lg-12">
+      <span>Search by Group Abbreviation</span>
+      <input type="text" nz-input placeholder="Group Abbreviation" name="grp" [(ngModel)]="grp" (ngModelChange)="filterOriginalList()"/>
+    </div>               
+  </div>
+</div>
+<div class="kit__utils__table">
+  <nz-table *ngIf="ShowSearchTable" class="table table-hover" #filterTable nzShowSizeChanger [nzData]="listOfFilterData">
+    <thead>
+      <tr>
+        <th class="align-middle" scope="col" *ngIf="showCheckbox">
+          <label nz-checkbox [(ngModel)]="isAllChecked" (ngModelChange)="updateAllChecked($event)"></label>
+        </th>
+        <th nzWidth="50%" [nzSortFn]="sortFunction(SortFileName)" [nzSortPriority]="sortPriority(SortFileName)">Name</th>
+        <th [nzSortFn]="sortFunction(SortGroupAbbr)" [nzSortPriority]="sortPriority(SortGroupAbbr)">Grp</th>
+        <th>#</th>
+        <th></th>
+        <th [nzSortFn]="sortFunction(SortRevision)" [nzSortPriority]="sortPriority(SortRevision)">Rev</th>
+        <th [nzSortFn]="sortFunction(SortRevisedDate)" [nzSortPriority]="sortPriority(SortRevisedDate)">Revised</th>
+        <th [nzSortFn]="sortFunction(SortStatus)" [nzSortPriority]="sortPriority(SortStatus)">Status</th>
+        <th nzWidth="40%" *ngIf="!isModalInput"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of filterTable.data">
+        <td class="align-middle" *ngIf="showCheckbox">
+          <label nz-checkbox [(ngModel)]="item.Checked"
+              (ngModelChange)="updateItemChecked($event, item.DocumentId)"></label>
+        </td>
+        <td class="align-middle">
+          <a class="text-blue" (click)="getDocumentUrl(item.DocumentId, false)">{{ item.Title }}</a>
+        </td>
+        <td class="align-middle">
+          {{ item.GroupAbbr }}
+        </td>
+        <td class="align-middle text-nowrap">
+          {{ item.Number }}
+        </td>
+        <td class="align-middle">
+          {{ item.Revision }}
+        </td>
+        <td class="align-middle">
+          <i class="fe fe-users" *ngIf="item.Shared"></i>
+        </td>
+        <td colspan="2" class="align-middle text-nowrap">
+          <div>{{ item.RevisionDate | datePattern }}<span class="text-right">{{ item.DocumentStatusAbbr }}</span></div>
+          <div>{{ item.SubTitle }}</div>
+        </td>
+        <td class="align-middle text-right" *ngIf="!isModalInput">
+          <a nz-button class="mr-2" nzType="link" [routerLink]="updateDocumentUrl(2, item.DocumentId)" *ngIf="item.DocumentId && canEditDocumentInput">Revise</a>
+          <button class="btn btn-link" (click)="getDocumentUrl(item.DocumentId, true)">
+            <i class="fe fe-download"></i>
+          </button>
+          <button type="button" class="btn btn-light ml-2" [routerLink]="updateDocumentUrl(1, item.DocumentId)" *ngIf="canEditDocumentInput">
+            <i class="fe fe-edit"></i>
+          </button>
+          <button type="button" class="btn btn-light ml-2" (click)="deleteDocument(item.DocumentId)" *ngIf="canDeleteDocumentInput">
+              <i class="fe fe-trash"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+</div>
+<div class="kit__utils__table">
+  <nz-table *ngIf="!ShowSearchTable" class="table table-hover" #expandTable nzShowSizeChanger [nzData]="listOfMapData | async">
+    <thead>
+      <tr>
+        <th class="align-middle" scope="col" *ngIf="showCheckbox">
+          <label nz-checkbox [(ngModel)]="isAllChecked" (ngModelChange)="updateAllChecked($event)"></label>
+        </th>
+        <th nzWidth="50%" [nzSortFn]="sortFunction(SortFileName)" [nzSortPriority]="sortPriority(SortFileName)">Name</th>
+        <th [nzSortFn]="sortFunction(SortGroupAbbr)" [nzSortPriority]="sortPriority(SortGroupAbbr)">Grp</th>
+        <th>#</th>
+        <th></th>
+        <th [nzSortFn]="sortFunction(SortRevision)" [nzSortPriority]="sortPriority(SortRevision)">Rev</th>
+        <th [nzSortFn]="sortFunction(SortRevisedDate)" [nzSortPriority]="sortPriority(SortRevisedDate)">Revised</th>
+        <th [nzSortFn]="sortFunction(SortStatus)" [nzSortPriority]="sortPriority(SortStatus)">Status</th>
+        <th nzWidth="40%" *ngIf="!isModalInput"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <ng-container *ngFor="let data of expandTable.data">
+        <ng-container *ngFor="let item of mapOfExpandedData[data.key]">
+          <tr *ngIf="(item.parent && item.parent.expand) || !item.parent">
+            <td class="align-middle" *ngIf="showCheckbox">
+              <label nz-checkbox [(ngModel)]="item.Checked"
+                  (ngModelChange)="updateItemChecked($event, item.DocumentId)"></label>
+            </td>
+            <td class="align-middle text-nowrap"
+              [nzIndentSize]="item.level! * 20"
+              [nzShowExpand]="!item.DocumentId"
+              [(nzExpand)]="item.expand"
+              (nzExpandChange)="collapse(mapOfExpandedData[data.key], item, $event)"
+            >
+              <a *ngIf="!item.DocumentId" (click)="item.expand = !item.expand">
+                <img src="assets/images/avatars/folder.png" class="img-fluid img-thumbnail mr-3" style="width:40px">
+                <span class="mr-5">{{ item.Title }}</span>
+              </a>
+              <a class="d-inline-block text-blue text-wrap mr-5" *ngIf="item.DocumentId" (click)="getDocumentUrl(item.DocumentId, false)">{{ item.Title }}</a>
+            </td>
+            <td class="align-middle">
+              {{ item.GroupAbbr }}
+            </td>
+            <td class="align-middle text-nowrap">
+              {{ item.Number }}
+            </td>
+            <td class="align-middle">
+              {{ item.Revision }}
+            </td>
+            <td class="align-middle">
+              <i class="fe fe-users" *ngIf="item.Shared"></i>
+            </td>
+            <td colspan="2" class="align-middle text-nowrap">
+              <div>{{ item.RevisionDate | datePattern }}<span class="text-right">{{ item.DocumentStatusAbbr }}</span></div>
+              <div>{{ item.SubTitle }}</div>
+            </td>
+            <td class="align-middle text-right" *ngIf="!isModalInput">
+              <a nz-button class="mr-2" nzType="link" [routerLink]="updateDocumentUrl(2, item.DocumentId)" *ngIf="item.DocumentId && canEditDocumentInput">Revise</a>
+              <button class="btn btn-link" (click)="getDocumentUrl(item.DocumentId, true)" *ngIf="item.DocumentId">
+                <i class="fe fe-download"></i>
+              </button>
+              <button type="button" class="btn btn-light ml-2" [routerLink]="updateDocumentUrl(1, item.DocumentId)" *ngIf="item.DocumentId && canEditDocumentInput" nz-tooltip nzTooltipPlacement="top" nzTooltipTitle="Details">
+                <i class="fe fe-edit"></i>
+              </button>
+              <button type="button" class="btn btn-light ml-2" (click)="deleteDocument(item.DocumentId)" *ngIf="item.DocumentId && canDeleteDocumentInput">
+                  <i class="fe fe-trash"></i>
+              </button>
+              <button *ngIf="!item.DocumentId && (canAddDocumentInput || canEditFolderInput || canDeleteFolderInput)" type="button" class="btn btn-light" nz-dropdown [nzDropdownMenu]="menu"
+                nzPlacement="bottomRight">
+                <i class="fe fe-more-vertical"></i>
+              </button>
+              <nz-dropdown-menu #menu="nzDropdownMenu">
+                <ul nz-menu>
+                  <li nz-menu-item [routerLink]="getUploadUrl(item.FolderId)" *ngIf="canAddDocumentInput">Upload Documents</li>
+                  <li nz-menu-item (click)="editFolder(item.FolderId)" *ngIf="canEditFolderInput">Edit Folder</li>
+                  <li nz-menu-item (click)="deleteFolder(item.FolderId)" *ngIf="canDeleteFolderInput">Delete Folder</li>
+                </ul>
+              </nz-dropdown-menu>
+            </td>
+          </tr>
+        </ng-container>
+      </ng-container>
+    </tbody>
+  </nz-table>
+</div>
+<div class="card-footer" *ngIf="showCheckbox">
+  <div class="d-flex flex-wrap btn-rpos p-2">
+    <button nzType="primary" nz-button (click)="save()" *ngIf="!advancedSearch">Save</button>
+    <button nzType="primary" nz-button (click)="deleteDocs()" *ngIf="advancedSearch">Delete Selected</button>
+    <button nzType="primary" nz-button (click)="obsoleteDocs()" class="ml-3" *ngIf="advancedSearch && !currentOnly">Obsolete Selected</button>
+      <button type="button" nz-button (click)="cancel()" class="ml-3" *ngIf="!advancedSearch">Cancel</button>
+  </div>
+</div>
+
+<app-document-viewer [documentSelectEvent]="selectedDocSubject.asObservable()"></app-document-viewer>
+<nz-modal [(nzVisible)]="isEditFolder" nzTitle="Edit Folder" nzOkText="Save"
+  (nzOnCancel)="cancelEditFolder()" (nzOnOk)="saveFolder()">
+  <nz-form-item class="bottom-margin-0">
+    <nz-form-label [nzSpan]="6" nzFor="folderName">Folder Name</nz-form-label>
+    <nz-form-control [nzSpan]="14">
+      <input nz-input id="folderName" [(ngModel)]="folder.FolderName">
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item class="bottom-margin-0">
+    <nz-form-label [nzSm]="6" [nzXs]="24" [nzNoColon]="true"></nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <label nz-checkbox id="shared" [(ngModel)]="folder.Shared">Share with Contractors</label>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item class="bottom-margin-0">
+    <nz-form-label [nzSm]="6" [nzXs]="24" [nzNoColon]="true"></nz-form-label>
+    <nz-form-control [nzSm]="14" [nzXs]="24">
+      <label nz-checkbox id="shareWithClients" [(ngModel)]="folder.ShareWithClients">Share with Clients</label>
+    </nz-form-control>
+  </nz-form-item>
+</nz-modal>

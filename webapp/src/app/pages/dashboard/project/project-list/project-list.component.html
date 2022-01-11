@@ -1,0 +1,112 @@
+<div class="card" [ngClass]="isModalInput?'':'d-sm-inline-flex list-min-width'">
+  <div class="card-header card-header-flex" *ngIf="!this.isModalInput">
+    <div class="d-flex flex-column justify-content-center mr-auto">
+      <div class="text-dark font-weight-bold font-size-18">Projects</div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="form-group form-inline">
+      <div class="d-flex justify-content-left align-items-center mr-3">
+        <nz-input-group [nzPrefix]="prefixTemplate">
+          <input type="text" nz-input placeholder="Search" name="searchTerm" [(ngModel)]="service.searchTerm" (keydown.enter)="goSearch()"/>
+        </nz-input-group>
+        <ng-template #prefixTemplate><i nz-icon nzType="search"></i></ng-template>
+        <button type="button" nz-button (click)="goSearch()" nzType="primary" [nzLoading]="loading$ | async">Go</button>
+      </div>
+      <label nz-checkbox name="isActive" [(ngModel)]="isActive" (ngModelChange)="goSearch()">Show Active Only</label>
+    </div>
+    <div class="row mb-3" *ngIf="access.canViewRegion">
+      <div class="col-xl-12 col-lg-12">
+        <app-regions [regionIdInput]="regionId" [hideRegionIfEmptyInput]=true [isOutsideFormInput]=true (regionOutput)="selectedRegionEmitter($event)"></app-regions>
+      </div>
+    </div>
+    <div class="kit__utils__table">
+      <table class="table table-hover" *ngIf="!isModalInput">
+        <thead>
+          <tr>
+            <th scope="col" sortable="JobNumber" (sort)="onSort($event)" *ngIf="showJobNumber">#</th>
+            <th scope="col" sortable="SiteName" (sort)="onSort($event)">Project Name</th>
+            <th scope="col" sortable="SiteLocation" (sort)="onSort($event)">Site Location</th>
+            <th scope="col" sortable="SiteCode" (sort)="onSort($event)">SiteCode</th>
+            <th scope="col" sortable="SiteManagerName" (sort)="onSort($event)">Site Manager Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of projects$ | async" (click)="navigateToProject(item.JobId)">
+            <td class="align-middle" *ngIf="showJobNumber">
+              <a class="itemLink" [routerLink]="['/home/job-detail', item.JobId]" *ngIf="access.canViewProject">
+                <ngb-highlight [result]="item.JobNumber"></ngb-highlight>
+              </a>
+              <ngb-highlight *ngIf="!access.canViewProject" [result]="item.JobNumber"></ngb-highlight>
+            </td>
+            <td class="align-middle">
+              <a class="itemLink" [routerLink]="['/home/job-detail', item.JobId]" *ngIf="access.canViewProject">
+                <ngb-highlight [result]="item.SiteName"></ngb-highlight>
+              </a>
+              <ngb-highlight *ngIf="!access.canViewProject" [result]="item.SiteName"></ngb-highlight>
+            </td>
+            <td class="align-middle"><ngb-highlight [result]="item.SiteLocation"></ngb-highlight></td>
+            <td class="align-middle"><ngb-highlight [result]="item.SiteCode"></ngb-highlight></td>
+            <td class="align-middle"><ngb-highlight [result]="item.SiteManagerName"></ngb-highlight></td>
+          </tr>
+        </tbody>
+      </table>
+      <table class="table table-hover" *ngIf="isModalInput">
+        <thead>
+          <tr>
+            <th class="align-middle" scope="col" *ngIf="isAllowMultipleInput"><label nz-checkbox [(ngModel)]="isAllChecked" (ngModelChange)="updateAllChecked($event)"></label></th>
+            <th class="align-middle" scope="col" sortable="JobNumber" (sort)="onSort($event)" *ngIf="showJobNumber">#</th>
+            <th class="align-middle" scope="col" sortable="SiteName" (sort)="onSort($event)">Project Name</th>
+            <th class="align-middle" scope="col" sortable="SiteLocation" (sort)="onSort($event)">Site Location</th>
+            <th class="text-center" scope="col"><button *ngIf="isAllowMultipleInput" type="button" nz-button nzType="primary" [disabled]="!isEnableSave" (click)="save()">Select Checked</button></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of projects$ | async">
+            <td *ngIf="isAllowMultipleInput" class="align-middle"><label nz-checkbox [(ngModel)]="item.Checked" (ngModelChange)="updateItemChecked($event, item.SiteId)"></label></td>
+            <td class="align-middle" *ngIf="showJobNumber">
+              <ngb-highlight [result]="item.JobNumber"></ngb-highlight>
+            </td>
+            <td class="align-middle">
+                <ngb-highlight [result]="item.SiteName"></ngb-highlight>
+            </td>
+            <td class="align-middle">
+              <ngb-highlight [result]="item.SiteLocation"></ngb-highlight>
+            </td>
+            <td class="text-center">
+              <button type="button" class="btn btn-light" (click)="onSelectProject(item)">
+                <i class="fe fe-arrow-right"></i>
+              </button>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot *ngIf="isAllowMultipleInput">
+          <td colspan="3" *ngIf="!showJobNumber">&nbsp;</td>
+          <td colspan="4" *ngIf="showJobNumber">&nbsp;</td>
+          <td class="text-center">
+            <button type="button" nz-button nzType="primary" [disabled]="!isEnableSave" (click)="save()">Select Checked</button>
+          </td>
+        </tfoot>
+      </table>
+    </div>
+    <app-list-status [listStatus]=listStatus.asObservable()></app-list-status>
+  </div>
+  <div *ngIf="service.total > 10" class="card-footer">
+    <div class="d-flex flex-wrap justify-content-between p-2">
+      <ngb-pagination
+        [collectionSize]="service.total" [maxSize]="service.maxSize" (pageChange)="pageSkipChange($event)" [pageSize]="service.pageSize">
+      </ngb-pagination>
+  
+      <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize" (ngModelChange)="pageSizeChange()">
+        <option [ngValue]="10">10 items per page</option>
+        <option [ngValue]="20">20 items per page</option>
+        <option [ngValue]="50">50 items per page</option>
+        <option [ngValue]="100">100 items per page</option>
+        <option [ngValue]="200">200 items per page</option>
+        <option [ngValue]="300">300 items per page</option>
+        <option [ngValue]="400">400 items per page</option>
+        <option [ngValue]="500">500 items per page</option>
+      </select>
+    </div>
+  </div>
+</div>

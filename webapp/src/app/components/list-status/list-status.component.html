@@ -1,0 +1,6 @@
+<div *ngIf="status.loading">
+    <div class="mt-2">&nbsp;</div>
+    <nz-spin nzTip="Loading..."></nz-spin>
+    <div class="mb-2">&nbsp;</div>
+</div>
+<div *ngIf="status.count == 0" class="text-center">No Data</div>

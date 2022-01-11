@@ -1,0 +1,15 @@
+/**
+ * @fileoverview added by tsickle
+ * Generated from: public-api.ts
+ * @suppress {checkTypes,constantProperty,extraRequire,missingOverride,missingReturn,unusedPrivateMembers,uselessCode} checked by tsc
+ */
+/**
+ * Use of this source code is governed by an MIT-style license that can be
+ * found in the LICENSE file at https://github.com/NG-ZORRO/ng-zorro-antd/blob/master/LICENSE
+ */
+export { NzAutocompleteModule } from './autocomplete.module';
+export { NzAutocompleteComponent } from './autocomplete.component';
+export { getNzAutocompleteMissingPanelError, NZ_AUTOCOMPLETE_VALUE_ACCESSOR, NzAutocompleteTriggerDirective } from './autocomplete-trigger.directive';
+export { NzOptionSelectionChange, NzAutocompleteOptionComponent } from './autocomplete-option.component';
+export { NzAutocompleteOptgroupComponent } from './autocomplete-optgroup.component';
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicHVibGljLWFwaS5qcyIsInNvdXJjZVJvb3QiOiJuZzovL25nLXpvcnJvLWFudGQvYXV0by1jb21wbGV0ZS8iLCJzb3VyY2VzIjpbInB1YmxpYy1hcGkudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7Ozs7O0FBS0EscUNBQWMsdUJBQXVCLENBQUM7QUFDdEMsd0NBQWMsMEJBQTBCLENBQUM7QUFDekMsbUhBQWMsa0NBQWtDLENBQUM7QUFDakQsdUVBQWMsaUNBQWlDLENBQUM7QUFDaEQsZ0RBQWMsbUNBQW1DLENBQUMiLCJzb3VyY2VzQ29udGVudCI6WyIvKipcbiAqIFVzZSBvZiB0aGlzIHNvdXJjZSBjb2RlIGlzIGdvdmVybmVkIGJ5IGFuIE1JVC1zdHlsZSBsaWNlbnNlIHRoYXQgY2FuIGJlXG4gKiBmb3VuZCBpbiB0aGUgTElDRU5TRSBmaWxlIGF0IGh0dHBzOi8vZ2l0aHViLmNvbS9ORy1aT1JSTy9uZy16b3Jyby1hbnRkL2Jsb2IvbWFzdGVyL0xJQ0VOU0VcbiAqL1xuXG5leHBvcnQgKiBmcm9tICcuL2F1dG9jb21wbGV0ZS5tb2R1bGUnO1xuZXhwb3J0ICogZnJvbSAnLi9hdXRvY29tcGxldGUuY29tcG9uZW50JztcbmV4cG9ydCAqIGZyb20gJy4vYXV0b2NvbXBsZXRlLXRyaWdnZXIuZGlyZWN0aXZlJztcbmV4cG9ydCAqIGZyb20gJy4vYXV0b2NvbXBsZXRlLW9wdGlvbi5jb21wb25lbnQnO1xuZXhwb3J0ICogZnJvbSAnLi9hdXRvY29tcGxldGUtb3B0Z3JvdXAuY29tcG9uZW50JztcbiJdfQ==

@@ -1,0 +1,127 @@
+<div *ngIf="order?.List">
+    <app-pcbu-header [pageTitleInput]="'Purchase/Work Order/s'"></app-pcbu-header>
+    <div class="card d-sm-inline-flex list-min-width">
+        <div class="card-header card-header-flex">
+            <div class="d-flex flex-column justify-content-center mr-auto">
+                <div class="text-dark font-weight-bold font-size-18">Purchase Order/s</div>
+            </div>
+            <div class="d-flex flex-column justify-content-center" *ngIf="!IsFromCheckList && order">
+                <app-ords-upload [ownerIdInput]="order.Header.ContractorCompanyId" [jobId]="jobId" [showSelectOrderInput]="!isModalInput && order.Details.ShowSelectOrder"
+                (uploadOutput)="refreshTable($event)"></app-ords-upload>
+            </div>
+        </div>
+        <div class="card-body">
+            <div *ngIf="!IsFromCheckList">
+                <div class="row mb-3 ml-1">
+                    <label nz-checkbox [(ngModel)]="order.Details.SupplierOnly"
+                        (ngModelChange)="postOrderJobDetails()">Supplier Only</label>
+                    <label nz-checkbox [(ngModel)]="order.Details.PoSafetyFirst"
+                        (ngModelChange)="postOrderJobDetails()">Lock until Safety Items Provided</label>
+                </div>
+                <div class="mb-2">Please accept the attached purchase order, or leave a note.</div>
+            </div>
+            <div class="kit__utils__table">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col">Name</th>
+                            <th scope="col">Note</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of order.List">
+                            <td class="align-middle">
+                                <img class="ml-3 mr-3" [src]="item.Status | inductionIcon">
+                            </td>
+                            <td class="align-middle">
+                                <a class="itemLink" [routerLink]="" (click)="viewDoc(item.OrderAttachmentId)" *ngIf="!ShowLockLabelText">
+                                    {{ item.FileName }}
+                                </a>
+                                <ngb-highlight [result]="item.FileName" *ngIf="ShowLockLabelText">
+                                </ngb-highlight>
+                                <span *ngIf="item.StatusDescription">
+                                    <br>
+                                    <ngb-highlight [result]="item.StatusDescription">
+                                    </ngb-highlight>
+                                </span>
+                                <span *ngIf="ShowLockLabelText">
+                                    <br>
+                                    <span class="text-red">Order will be available after Pre-Start Check List is complete.</span>
+                                </span>
+                            </td>
+                            <td class="align-middle">
+                                <ngb-highlight [result]="item.Note" *ngIf="ShowNote(item)"></ngb-highlight>
+                            </td>
+                            <td class="align-middle">
+                                <span *ngIf="!ShowLockLabelText">
+                                    <button class="btn btn-success action" (click)="acceptOrder(item.OrderAttachmentId)"
+                                    *ngIf="ShowAcceptButton(item)">Accept</button>
+                                <a nz-button nzType="link" (click)="undoAccept(item.OrderAttachmentId)"
+                                    *ngIf="ShowUndoAcceptButton(item)"> Undo Accept </a>
+                                </span>
+                            </td>
+                            <td class="align-middle">
+                                <a nz-button nzType="link" (click)="editNote(item)"
+                                    *ngIf="!item.Note && ShowNote(item)"> Add Note </a>
+                                <a nz-button nzType="link" (click)="editNote(item)" *ngIf="item.Note && ShowNote(item)">
+                                    Edit Note </a>
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-light ml-2"
+                                    (click)="delete(item.OrderAttachmentId)" *ngIf="!IsFromCheckList">
+                                    <i class="fe fe-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="card form-width list-min-width" *ngIf="!IsFromCheckList">
+        <div class="card-header card-header-flex">
+            <div class="d-flex flex-column justify-content-center mr-auto">
+                <div class="text-dark font-weight-bold font-size-18">Email</div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <span class="w-50">
+                    <app-email-templates [titleInput]="'Use email Template'" [emailTypeIdInput]="[4]"
+                        [isOutsideFormInput]="true" [isSetDefaultInput]="true" [isEnableDefaultInput]="true"
+                        (emailTemplatesOutput)="emailTemplatesEmitter($event)"></app-email-templates>
+                </span>
+                <a nz-button nzType="link" (click)="viewEmail()" *ngIf="!isModalInput"> View</a>
+                <nz-button-group class="ml-3">
+                    <button nzType="primary" nz-button (click)="sendEmail()">Send Email</button>
+                    <button type="button" class="btn btn-success btn-with-addon text-nowrap ml-3" (click)="add()" *ngIf="!isModalInput">
+                        <span class="btn-addon"><i class="btn-addon-icon fe fe-plus-circle"></i></span> Compose Email
+                    </button>
+                </nz-button-group>
+            </div>
+        </div>
+    </div>
+    <br>
+    <app-attachments *ngIf="order.List" [groupIdInput]="12" [relatedIdInput]="jobId" [isReadOnlyInput]="IsFromCheckList"></app-attachments>
+</div>
+<div class="form-width form-actions btn-rpos" *ngIf="!IsFromCheckList">
+    <button type="button" nz-button nzType="primary" (click)="cancel()"><i nz-icon nzType="left"></i> Back</button>
+</div>
+<app-document-viewer [documentSelectEvent]="selectedDocSubject.asObservable()"></app-document-viewer>
+
+<form [formGroup]="form" nzForm>
+    <nz-modal [(nzVisible)]="isEditNoteVisible" [nzTitle]="'Note'" nzOkText="Save"
+    (nzOnCancel)="isEditNoteVisible = false" (nzOnOk)="saveNote()">
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzFor="note">Note</nz-form-label>
+      <nz-form-control [nzSpan]="14">
+        <textarea nz-input rows="4" placeholder="Notes" id="note" formControlName="note"></textarea>
+      </nz-form-control>
+    </nz-form-item>
+    </nz-modal>
+</form>

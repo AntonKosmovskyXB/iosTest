@@ -1,0 +1,47 @@
+<div class="footer">
+  <div *ngIf="dataReady">
+    <div class="footerInner fixed-footer" *ngIf="!renderSideNav && !hideInductionNavigation" >
+
+      <div class="d-flex justify-content-between w-100 p-2" *ngIf="!hideNextIcon && !showDone">
+        <button *ngIf="!showBack" nz-button nzType="default"  nzSize="large" class="mr-3" [routerLink]="['/home/job-menu']" nzBlock >
+          <span><i nz-icon nzType="home" nzTheme="outline"></i> Home</span>
+        </button>
+        <button *ngIf="showBack" nz-button nzType="default" class="mr-3" nzSize="large" (click)="moveBack()" nzBlock>
+          <span><i nz-icon nzType="left" nzTheme="outline"></i> Back</span>
+        </button>
+        <button [disabled]="disabled" nz-button nzSize="large" nzType="primary" (click)="moveNext()" nzBlock>
+          <span> Next <i nz-icon nzType="right" nzTheme="outline"></i></span>
+        </button>
+      </div>
+      
+      <div class="d-flex justify-content-between w-100 p-2" *ngIf="hideNextIcon && !showDone">
+        <button *ngIf="!showBack" nz-button nzType="default"  nzSize="large" class="mr-3" [routerLink]="['/home/job-menu']" nzBlock >
+          <span><i nz-icon nzType="home" nzTheme="outline"></i> Home</span>
+        </button>
+        <button *ngIf="showBack" nz-button nzType="default" class="mr-3" nzSize="large" (click)="moveBack()" nzBlock>
+          <span><i nz-icon nzType="left" nzTheme="outline"></i> Back</span>
+        </button>
+        <button [disabled]="disabled" nz-button nzSize="large" nzType="primary" (click)="moveNext()" nzBlock>
+          <span><i nz-icon nzType="like" nzTheme="outline"></i> Read & Understood</span>
+        </button>
+      </div>
+
+      <div class="d-flex justify-content-between w-100 p-2" *ngIf="showDone">
+        <button nz-button nzType="default" class="mr-3" nzSize="large" (click)="moveBack()" nzBlock>
+          <span><i nz-icon nzType="left" nzTheme="outline"></i> Back</span>
+        </button>
+        <button  nz-button nzType="primary" nzSize=large [routerLink]="['/home/job-menu']" nzBlock>
+          <span><i nz-icon nzType="home" nzTheme="outline"></i> Home</span>
+        </button>
+      </div>
+      
+    </div>
+  </div>
+  <div [ngClass]="hideInductionNavigation ? 'footerInner fixed-footer' : 'footerInner'" *ngIf="renderSideNav || hideInductionNavigation">
+    <p class="text-center mb-2 mt-2">
+      Copyright © {{currentYear}} SiteBook |
+      Version {{version}} |
+      <a class="itemLink" (click)="support()" [routerLink]="">Support</a>
+    </p>
+  </div>
+</div>

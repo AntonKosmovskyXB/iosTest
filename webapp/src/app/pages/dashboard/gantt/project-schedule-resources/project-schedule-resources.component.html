@@ -1,0 +1,6 @@
+<input nz-input [(ngModel)]="resourceLabel" (ngModelChange)="onChange($event)" [nzAutocomplete]="auto">
+<nz-autocomplete #auto (selectionChange)="onSelectResource($event)">
+    <nz-auto-option *ngFor="let resource of filteredResources" [nzValue]="resource.PersonnelId" [nzLabel]="getResourceLabel(resource)">
+      {{ getResourceLabel(resource) }}
+    </nz-auto-option>
+</nz-autocomplete>

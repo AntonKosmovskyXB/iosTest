@@ -1,0 +1,13 @@
+<nz-form-item class="bottom-margin-0">
+    <nz-form-label [nzSm]="isOutsideFormInput?0:(smInput?smInput:6)" [nzXs]="isOutsideFormInput?0:24" nzFor="state">State</nz-form-label>
+    <nz-form-control [nzSm]="isOutsideFormInput?0:14" [nzXs]="isOutsideFormInput?0:24">
+      <nz-input-group nzCompact>
+        <input nz-input [ngClass]="isOutsideFormInput?'w-100':'w-50'" placeholder="State" id="state" [(ngModel)]="stateInput" (ngModelChange)="onChange($event)" [nzAutocomplete]="auto" [readonly]="readOnlyInput">
+        <nz-autocomplete #auto (selectionChange)="onSelectState($event)">
+          <nz-auto-option *ngFor="let item of filteredStates" [nzValue]="item.StateCode" [nzLabel]="item.StateName">
+            {{ item.StateName }}
+          </nz-auto-option>
+        </nz-autocomplete>
+      </nz-input-group>
+    </nz-form-control>
+</nz-form-item>

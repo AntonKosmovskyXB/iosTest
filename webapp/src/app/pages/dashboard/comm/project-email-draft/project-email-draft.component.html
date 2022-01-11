@@ -1,0 +1,164 @@
+<div>
+    <div class="card ck-form-width">
+        <div class="card-header card-header-flex">
+            <div class="d-flex flex-column justify-content-center mr-auto">
+                <app-page-header [titleInput]="'Draft Email'" [jobInput]="job"></app-page-header>
+            </div>
+            <div class="d-flex flex-column justify-content-center" *ngIf="commEmailDraft">
+                <button type="button" class="btn btn-light" (click)="discardDraft()">
+                    <i class="fe fe-trash"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            <form nz-form [formGroup]="form" (ngSubmit)="send(form.value)" *ngIf="commEmailDraft">
+
+                <app-email-templates [titleInput]="'Select Template'"
+                    [emailTypeIdInput]="EmailGroup" [isOutsideFormInput]="false"
+                    [emailTemplateIdInput]="commEmailDraft.commItemEdit.EmailTemplateId" [isEnableDefaultInput]="true"
+                    (emailTemplatesOutput)="emailTemplatesEmitter($event)"></app-email-templates>
+
+                <nz-form-item class="bottom-margin-0">
+                    <nz-form-label [nzSm]="6" [nzXs]="24">From</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                        <nz-input-group [nzAddOnAfter]="recipientIconButton" class="w-75">
+                            <input nz-input formControlName="fromName" placeholder="From" id="fromName"
+                                readonly="readonly" />
+                        </nz-input-group>
+                        <ng-template #recipientIconButton>
+                            <nz-button-group>
+                                <button type="button" nz-button nzType="primary"
+                                (click)="setPersonModalVisible(from, true)">Select</button>
+                            </nz-button-group>
+                        </ng-template>
+                        <button type="button" class="btn btn-light ml-3" nz-dropdown [nzDropdownMenu]="menu">
+                            <i class="btn-addon-icon fe fe-more-vertical"></i>
+                        </button>
+                        <nz-dropdown-menu #menu="nzDropdownMenu">
+                            <ul nz-menu>
+                                <li nz-menu-item (click)="applyChangeSender(2)">Site Mgr</li>
+                                <li nz-menu-item (click)="applyChangeSender(3)">Prog Admin</li>
+                                <li nz-menu-item (click)="applyChangeSender(4)">Prog Mgr</li>
+                                <li nz-menu-item (click)="applyChangeSender(1)">Me</li>
+                            </ul>
+                        </nz-dropdown-menu>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item class="bottom-margin-0">
+                    <nz-form-label [nzSm]="6" [nzXs]="24" [nzNoColon]="true">
+                        <div [ngClass]="ToRecipients.length > 0 ? 'row mt-5 mb-3' : 'row'">
+                            <div class="text-wrap">
+                                <button type="button" nz-button nzType="primary" class="mr-3" (click)="send(form.value)">Send</button>
+                                <button type="button" class="btn btn-success btn-with-addon text-nowrap mr-3" (click)="addRecipient()">
+                                    <span class="btn-addon"><i class="btn-addon-icon fe fe-plus-circle"></i></span> To
+                                </button>
+                            </div>
+                        </div>
+                    </nz-form-label>
+                    <nz-modal
+                        nzWidth="898"
+                        [nzStyle]="{ top: '0px' }"
+                        *ngIf="isRecipientModalVisible"
+                        [(nzVisible)]="isRecipientModalVisible"
+                        nzTitle="Select Recipient"
+                        [nzFooter]="emptyModalFooter"
+                        (nzOnCancel)="setRecipientModalVisible(false)">
+                        <app-project-email-contacts [isModalInput]=true [commItemId]="commEmailDraft.commItemEdit.CommItemId" [jobId]="jobId ? jobId : ''" (contactsOuput)="contactsEmitter()"></app-project-email-contacts>
+                    </nz-modal>
+                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                        <div class="kit__utils__table" *ngIf="ToRecipients.length > 0">
+                            <table class="table table-hover">
+                                <tbody>
+                                    <tr *ngFor="let item of ToRecipients">
+                                        <td>
+                                            <span>{{ item.Name }}</span> <br>
+                                            <span>{{ item.CompanyName }}</span>
+                                        </td>
+                                        <td>
+                                            <ngb-highlight [result]="item.EmailAddress"></ngb-highlight>
+                                        </td>
+                                        <td class="text-right">
+                                            <button type="button" (click)="deleteCcToItem(item.CommItemToId)"
+                                                class="btn btn-light">
+                                                <i class="fe fe-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item class="bottom-margin-0">
+                    <nz-form-label [nzSm]="6" [nzXs]="24" [nzNoColon]="true">
+                        <div [ngClass]="CCRecipients.length > 0 ? 'text-wrap mt-5 mb-3' : 'text-wrap'">
+                            <button type="button" class="btn btn-success btn-with-addon text-nowrap"
+                                (click)="setPersonModalVisible(cc,true)">
+                                <span class="btn-addon"><i class="btn-addon-icon fe fe-plus-circle"></i></span> CC
+                            </button>
+                        </div>
+                    </nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                        <div class="kit__utils__table" *ngIf="CCRecipients.length > 0">
+                            <table class="table table-hover">
+                                <tbody>
+                                    <tr *ngFor="let item of CCRecipients">
+                                        <td>
+                                            <span>{{ item.Name }}</span> <br>
+                                            <span>{{ item.CompanyName }}</span>
+                                        </td>
+                                        <td>
+                                            <ngb-highlight [result]="item.EmailAddress"></ngb-highlight>
+                                        </td>
+                                        <td class="text-right">
+                                            <button type="button" (click)="deleteCcToItem(item.CommItemToId)"
+                                                class="btn btn-light">
+                                                <i class="fe fe-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </nz-form-control>
+                </nz-form-item>
+
+                <nz-form-item class="bottom-margin-0">
+                    <nz-form-label [nzSm]="6" [nzXs]="24" nzFor="subject">Subject</nz-form-label>
+                    <nz-form-control [nzSm]="14" [nzXs]="24">
+                        <input nz-input formControlName="subject" placeholder="Subject" id="subject" />
+                    </nz-form-control>
+                </nz-form-item>
+
+                <div class="mb-2">
+                    <app-ckeditor [htmlInput]="commEmailDraft.commItemEdit.Message" [modeInput]=1>
+                    </app-ckeditor>
+                </div>
+
+                <div class="form-actions btn-rpos">
+                    <div class="text-wrap">
+                        <button nz-button nzType="primary" class="mr-3">Send</button>
+                        <a nz-button nzType="link" class="mr-3" (click)="saveDraft(form.value, false)">Save Draft</a>
+                        <button type="button" class="btn btn-light mr-3" (click)="discardDraft()">
+                            <i class="fe fe-trash"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <nz-modal [(nzVisible)]="isPersonModalVisible" nzTitle="Select Person" [nzFooter]="emptyModalFooter"
+                    (nzOnCancel)="setPersonModalVisible(contactType,false)" *ngIf="isPersonModalVisible">
+                    <app-contacts-search [visibleInput]="isPersonModalVisible" [modeInput]="5"
+                        (selectedContactOutput)="selectedPersonEmitter($event)"></app-contacts-search>
+                </nz-modal>
+
+            </form>
+        </div>
+    </div>
+
+    <app-attachments *ngIf="commEmailDraft" [isModalInput]="isModalInput" [groupIdInput]="13"
+        [relatedIdInput]="commEmailDraft.commItemEdit.CommItemId" [jobIdInput]="jobId"></app-attachments>
+
+</div>
+<ng-template #emptyModalFooter></ng-template>

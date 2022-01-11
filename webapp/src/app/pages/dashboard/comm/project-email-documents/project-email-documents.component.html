@@ -1,0 +1,16 @@
+<form>
+    <div class="card" [ngClass]="isModalInput?'':'d-sm-inline-flex list-min-width'">
+        <div class="card-header card-header-flex">
+          <div class="d-flex flex-column justify-content-center mr-auto">
+            <app-page-header [titleInput]="'Documents'" [jobInput]="job"></app-page-header>
+          </div>
+          <div class="d-flex flex-column justify-content-center" *ngIf="!isModalInput && access.Add && job">
+            <button type="button" class="btn btn-success btn-with-addon text-nowrap" [routerLink]="['/home/upload-doc/', job.JobId, 'null', job.SiteId, 'null', 'null']"> 
+              <span class="btn-addon"><i class="btn-addon-icon fe fe-plus-circle"></i></span> Upload Documents </button>
+          </div>
+        </div>
+        <div class="card-body">
+          <app-docs [isModalInput]="isModalInput" [typeInput]="3" [idInput]="commItemId" [jobInput]="job" [canAddDocumentInput]="access.Add" [canEditDocumentInput]="access.Update" [canDeleteDocumentInput]="access.Delete" (docsOutput)="docsEmitter()"></app-docs>
+        </div>
+    </div>
+</form>

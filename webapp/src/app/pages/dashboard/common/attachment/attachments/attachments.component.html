@@ -1,0 +1,112 @@
+<div class="card d-sm-inline-flex list-min-width">
+    <div class="card-header card-header-flex">
+        <div class="d-flex flex-column justify-content-center " [ngClass]="service.Source.length > 0 ? 'mr-auto' : 'mr-5'">
+          <div class="text-dark font-weight-bold font-size-18">{{ title }}</div>
+        </div>
+        <div class="d-flex flex-column justify-content-center">
+          <div class="row d-flex align-items-center">
+            <app-attachment-upload [groupIdInput]="groupIdInput" [relatedIdInput]="relatedIdInput" (singleUploadOutput)="singleUploadEmitter($event)" (multipleUploadOutput)="refreshTable($event)" *ngIf="!isReadOnlyInput"></app-attachment-upload>
+            <button type="button" nz-button nzType="primary" class="ml-3" (click)="selectDocument()" *ngIf="IsShowSelectDocument">Select Document</button>
+            <button type="button" nz-button nzType="primary" class="ml-3" (click)="showNoteModal(null)" *ngIf="IsShowNote"><i nz-icon nzType="plus"></i>Note</button>
+          </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="form-group form-inline" *ngIf="IsShowPaging">
+            <div class="d-flex justify-content-left align-items-center">
+              <nz-input-group [nzPrefix]="prefixTemplate">
+                <input type="text" nz-input placeholder="Search" name="searchTerm" [(ngModel)]="service.searchTerm"/>
+              </nz-input-group>
+              <ng-template #prefixTemplate><i nz-icon nzType="search"></i></ng-template>
+            </div>
+            <span *ngIf="service.loading$ | async">Loading...</span>
+        </div>
+        <div class="kit__utils__table">
+            <table class="table table-hover">
+              <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col" sortable="FileName" (sort)="onSort($event)">Name</th>
+                <th scope="col" sortable="Note" (sort)="onSort($event)">Notes</th>
+                <th scope="col" sortable="CreatedOn" (sort)="onSort($event)">Created On</th>
+                <th scope="col" sortable="CreatedByName" (sort)="onSort($event)">Created By</th>
+                <th scope="col" sortable="Size" (sort)="onSort($event)">Size</th>
+                <th scope="col"></th>
+              </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of attachments$ | async">
+                  <td class="align-middle"><img [src]="getIcon(item.FileName)" style="width: 20px;"/></td>
+                  <td class="align-middle">
+                    <ngb-highlight [result]="item.FileName | truncate" *ngIf="isNote(item.FileName)"></ngb-highlight>
+                    <a nzType="link" class="text-blue" (click)="getAttachmentUrl(item.AttachmentId, false)" *ngIf="!isNote(item.FileName)">{{ item.FileName | truncate }}</a>
+                  </td>
+                  <td class="align-middle"><ngb-highlight [result]="item.Note | truncate"></ngb-highlight></td>
+                  <td class="align-middle text-nowrap"><ngb-highlight [result]="item.CreatedOn | datePattern: 'both'"></ngb-highlight></td>
+                  <td class="align-middle"><ngb-highlight [result]="item.CreatedByName"></ngb-highlight></td>
+                  <td class="align-middle"><ngb-highlight [result]="getSize(item)"></ngb-highlight></td>
+                  <td>
+                    <button class="btn btn-link" (click)="getAttachmentUrl(item.AttachmentId, true)" *ngIf="!isNote(item.FileName)">
+                      <i class="fe fe-download"></i>
+                    </button>
+                    <button type="button" class="btn btn-light ml-2" (click)="showNoteModal(item)" *ngIf="isShowEdit(item.CreatedBy) && !isReadOnlyInput">
+                      <i class="fe fe-edit"></i>
+                    </button>
+                    <button type="button" class="btn btn-light ml-2" (click)="deleteAttachment(item.AttachmentId)" *ngIf="!isReadOnlyInput">
+                      <i class="fe fe-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+        <app-list-status [listStatus]=listStatus.asObservable()></app-list-status>
+        <div class="card-footer" *ngIf="IsShowPaging">
+            <div class="d-flex flex-wrap justify-content-between p-2">
+              <ngb-pagination
+                [collectionSize]="service.total$ | async" [maxSize]="service.maxSize" [(page)]="service.page" [pageSize]="service.pageSize">
+              </ngb-pagination>
+          
+              <select class="custom-select" style="width: auto" name="pageSize" [(ngModel)]="service.pageSize">
+                <option [ngValue]="service.Source.length">all items</option>
+                <option [ngValue]="10">10 items per page</option>
+                <option [ngValue]="20">20 items per page</option>
+                <option [ngValue]="50">50 items per page</option>
+              </select>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer" *ngIf="IsShowFooter">
+      <div *ngIf="groupIdInput == 12 && !isReadOnlyInput">
+        Note: These attachments(e.g. Quote, Plans) are available with the Order in SiteBook (not attached to the email).
+      </div>
+      <div *ngIf="totalSize">
+        <div *ngIf="totalSize > 10000000">
+          <i class="fe fe-alert-triangle text-danger mr-2"> </i>
+          <span>ERROR: Attachments exceed 10 Mb. This email may not be delivered.</span>
+        </div>
+        <div *ngIf="!(totalSize > 10000000) && totalSize > 0">Total Attachment Size: {{totalSize.toFixed(0)}}  Kb</div>
+      </div>
+    </div>
+</div>
+<app-document-viewer [documentSelectEvent]="selectedDocSubject.asObservable()"></app-document-viewer>
+<nz-modal *ngIf="isShowNoteModal" [(nzVisible)]="isShowNoteModal" [nzTitle]="NoteTitle" nzOkText="Save"
+  (nzOnCancel)="cancelNoteModal()" (nzOnOk)="saveNote()">
+  <nz-form-item>
+    <nz-form-label [nzSpan]="6" nzFor="notes">Notes</nz-form-label>
+    <nz-form-control [nzSpan]="14">
+      <textarea nz-input rows="4" id="notes" [(ngModel)]="note"></textarea>
+    </nz-form-control>
+  </nz-form-item>
+</nz-modal>
+<nz-modal
+  nzWidth="898"
+  [nzStyle]="{ top: '0px' }"
+  *ngIf="isSelectDocumentModalVisible"
+  [(nzVisible)]="isSelectDocumentModalVisible"
+  nzTitle="Select Document"
+  [nzFooter]="emptyModalFooter"
+  (nzOnCancel)="setSelectDocumentModalVisible(false)">
+  <app-project-email-documents [isModalInput]=true [commItemId]="relatedIdInput" [jobId]="JobId" (emailDocsOutput)="emailDocsEmitter()"></app-project-email-documents>
+</nz-modal>
+<ng-template #emptyModalFooter></ng-template>

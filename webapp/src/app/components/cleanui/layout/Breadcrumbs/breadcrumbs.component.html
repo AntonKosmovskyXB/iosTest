@@ -1,0 +1,21 @@
+<div id="breadcrumb_header" class="breadcrumbs">
+  <div class="path">
+    <a href routerLink="/">Home</a>
+    <a href [routerLink]="getRouterLink(menuItem)" *ngIf="!mainMenu && menuItem">
+      <span class="arrow"></span>
+      <span>{{ menuItem.title }}</span>
+    </a>
+    <ng-container *ngFor="let item of breadcrumbs; let last = last;">
+      <span *ngIf="!last">
+        <a href [routerLink]="getRouterLink(item)">
+          <span class="arrow"></span>
+          <span>{{ item.title }}</span>
+        </a>
+      </span>
+      <span *ngIf="last">
+        <span class="arrow"></span>
+        <strong class="current">{{ item.title }}</strong>
+      </span>
+    </ng-container>
+  </div>
+</div>

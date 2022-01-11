@@ -1,0 +1,61 @@
+@import '../../../../../../gantt_7/codebase/dhtmlxgantt.css';
+
+.gantt-chart-single {
+  position: absolute;
+  width: 100%;
+}
+
+.weekend {
+  background: #f4f7f4;
+}
+
+.gantt_cell {
+  font-size: 11px;
+}
+
+.tools-single {
+  height: 42px;
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.baseline {
+  position: absolute;
+  border-radius: 2px;
+  opacity: 0.6;
+  margin-top: -7px;
+  height: 8px;
+  background: #ffd180;
+  border: 1px solid rgb(255, 153, 0);
+}
+
+.search {
+  width: 120px !important;
+  height: 32px !important;
+}
+
+.constraint-marker {
+  position: absolute;
+
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+
+  width: 24px;
+  height: 24px;
+  margin-top: -1px;
+
+  opacity: 0.4;
+  z-index: 1;
+  background: url('https://docs.dhtmlx.com/gantt/samples/common/constraint-arrow.svg') center
+    no-repeat;
+  background-size: cover;
+}
+
+.constraint-marker.earliest-start {
+  margin-left: -23px;
+}
+
+.constraint-marker.latest-end {
+  margin-left: -3px;
+  transform: rotate(180deg);
+}

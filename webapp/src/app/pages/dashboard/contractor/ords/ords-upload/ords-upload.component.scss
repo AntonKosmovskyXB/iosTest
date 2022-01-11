@@ -1,0 +1,15 @@
+.uploadfilecontainer {
+    height: 50px;
+    border: 1px dashed #d9d9d9;
+    background-color: #fafafa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+  }
+  
+  .uploadfilecontainer:hover {
+    border-color: #1890ff;
+    cursor: pointer;
+  }
+  

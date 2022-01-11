@@ -1,0 +1,23 @@
+.cell {
+  cursor: pointer;
+}
+
+.disabled-cell {
+  pointer-events: none;
+}
+
+.enabled-cell {
+  pointer-events: unset;
+}
+
+.date-picker {
+  width: 110px !important;
+}
+
+.plain-text {
+  width: 150px !important;
+}
+
+.state-picker {
+  width: 60px !important;
+}

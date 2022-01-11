@@ -1,0 +1,46 @@
+<div>
+  <div nz-dropdown nzTrigger="click" class="dropdown" [nzDropdownMenu]="menu" (nzVisibleChange)="badgeCountIncrease()">
+    <!-- <nz-badge [nzCount]="badgeCount">
+    </nz-badge> -->
+    <nz-avatar nzIcon="user" [nzShape]="'square'" [nzSize]="'large'" class="avatar"></nz-avatar>
+  </div>
+  <nz-dropdown-menu #menu="nzDropdownMenu">
+    <ul nz-menu class="user-list">
+        <li nz-menu-item>
+        <strong>{{ 'topBar.profileMenu.hello' | translate }}, {{name || 'Anonymous'}}</strong>
+        <div>
+          <strong>
+            {{ 'topBar.profileMenu.role' | translate }}:
+          </strong>
+          {{role || '—'}}
+        </div>
+      </li>
+      <li nz-menu-divider></li>
+      <li nz-menu-item>
+        <div>
+          <strong>{{ 'topBar.profileMenu.email' | translate }}: </strong>
+          {{email || '—'}}
+          <br />
+          <strong>{{ 'topBar.profileMenu.phone' | translate }}: </strong>
+          {{phone || '—'}}
+        </div>
+      </li>
+      <li nz-menu-divider></li>
+      <li nz-menu-item [routerLink]="['/home/profile']">
+        <i class="fe fe-user mr-2"></i>
+          {{ 'topBar.profileMenu.editProfile' | translate }}
+      </li>
+      <li nz-menu-divider></li>
+      <li nz-menu-item (click)="logout()">
+        <i class="fe fe-log-out mr-2"></i>
+          {{ 'topBar.profileMenu.logout' | translate }}
+      </li>
+      <li nz-menu-divider></li>
+      <li nz-menu-item>
+        <div>
+          {{companyName || '—'}}
+        </div>
+      </li>
+    </ul>
+  </nz-dropdown-menu>
+</div>

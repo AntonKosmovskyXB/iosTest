@@ -1,0 +1,3 @@
+<div class="content" [ngClass]="Class" *ngIf="IsShowInstructions && contentInput">
+    <div [innerHtml]="contentInput | sanitizeHtml"></div>
+</div>

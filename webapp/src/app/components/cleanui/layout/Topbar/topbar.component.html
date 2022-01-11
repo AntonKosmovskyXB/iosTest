@@ -1,0 +1,17 @@
+<div *ngIf="renderSideNav" class="topbar">
+  <div class="logoContainer" routerLink="/">
+    <div class="logo">
+      <img src="assets/images/sb_logo.png" class="logoSize" alt="SiteBook"/>
+    </div>
+  </div>
+  <div class="d-none d-md-inline">
+    <span class="ml-3 mr-3">{{ CompanyName }}</span>
+  </div>
+  <div class="d-none d-md-inline font-size-16">
+    <a href routerLink="/"><i class="icon fe fe-home"></i> Home</a>
+  </div>
+  <div class="mr-auto" >&nbsp;</div>
+  <div>
+    <cui-topbar-user-menu></cui-topbar-user-menu>
+  </div>
+</div>

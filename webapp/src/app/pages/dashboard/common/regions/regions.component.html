@@ -1,0 +1,13 @@
+<div *ngIf="!hideRegion">
+    <nz-form-item class="bottom-margin-0">
+        <nz-form-label [nzSm]="isOutsideFormInput?0:6" [nzXs]="isOutsideFormInput?0:24">Region</nz-form-label>
+        <nz-form-control [nzSm]="isOutsideFormInput?0:14" [nzXs]="isOutsideFormInput?0:24">
+            <nz-input-group nzCompact>
+                <nz-select class="w-50" [(ngModel)]="regionIdInput" (ngModelChange)="onChange($event)" nzAllowClear>
+                    <nz-option *ngFor="let item of regions" [nzValue]="item.RegionId" [nzLabel]="item.RegionName"></nz-option>
+                </nz-select>
+                <button type="button" nz-button nzType="default" (click)="fetchRegions(true)"><i nz-icon nzType="reload"></i></button>
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+</div>

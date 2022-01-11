@@ -1,0 +1,84 @@
+<div class="card" [ngClass]="isModalInput?'':'d-sm-inline-flex list-min-width'">
+    <div class="card-header card-header-flex">
+        <div class="d-flex flex-column justify-content-center mr-auto">
+            <div class="text-dark font-weight-bold font-size-18">Holidays</div>
+        </div>
+        <div class="d-flex flex-column justify-content-center" *ngIf="access.Add">
+            <button type="button" class="btn btn-success btn-with-addon text-nowrap" (click)="add()">
+                <span class="btn-addon"><i class="btn-addon-icon fe fe-plus-circle"></i></span> Add
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="form-group form-inline">
+            <nz-date-picker [(ngModel)]="selectedFromDate" [nzFormat]="'dd-MMM-yy'" [nzPlaceHolder]="'From Date'"></nz-date-picker>
+            <span class="ml-3 mr-3">to</span>
+            <nz-date-picker class="mr-3" [(ngModel)]="selectedToDate" [nzFormat]="'dd-MMM-yy'" [nzPlaceHolder]="'To Date'"></nz-date-picker>
+            <app-states [stateInput]="state" [isOutsideFormInput]=true></app-states>
+            <button class="ml-3" type="button" nz-button (click)="goSearch()" nzType="primary">Go</button>
+        </div>
+        <div class="kit__utils__table">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th scope="col">State</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Back Colour</th>
+                        <th scope="col">Gantt Text</th>
+                        <th scope="col"></th>
+                        <th scope="col" *ngIf="isModalInput"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of HolidayList">
+                        <td class="align-middle">
+                            <span *ngIf="!(item.IsEditing && item.IsNew)" class="cell" [ngClass]="access.Update?'enabled-cell':'disabled-cell'" (click)="setIsEditing(item)">{{ item.State }}</span>
+                            <input *ngIf="item.IsEditing && item.IsNew" class="state-picker" nz-input [(ngModel)]="item.State" [nzAutocomplete]="auto">
+                            <nz-autocomplete #auto (selectionChange)="onSelectState(item, $event)">
+                                <nz-auto-option *ngFor="let item of states" [nzValue]="item.StateCode" [nzLabel]="item.StateCode">
+                                  {{ item.StateCode }}
+                                </nz-auto-option>
+                            </nz-autocomplete>
+                        </td>
+                        <td class="align-middle">
+                            <span *ngIf="!item.IsEditing" class="cell" [ngClass]="access.Update?'enabled-cell':'disabled-cell'" (click)="setIsEditing(item)">{{ item.HolidayDate | datePattern }}</span>
+                            <nz-date-picker *ngIf="item.IsEditing" class="date-picker" [(ngModel)]="item.HolidayDate" [nzFormat]="'dd-MMM-yy'" nzAllowClear="false"></nz-date-picker>
+                        </td>
+                        <td class="align-middle">
+                            <span *ngIf="!item.IsEditing" class="cell" [ngClass]="access.Update?'enabled-cell':'disabled-cell'" (click)="setIsEditing(item)">{{ item.Description }}</span>
+                            <input *ngIf="item.IsEditing" class="plain-text" nz-input [(ngModel)]="item.Description"/>
+                        </td>
+                        <td class="align-middle">
+                            <button *ngIf="!item.IsEditing" nz-button nzShape="circle" (click)="setIsEditing(item)" [ngStyle]="{'background-color': item.BackColour}" [disabled]="!access.Update">&nbsp;</button>
+                            <button *ngIf="item.IsEditing" nz-button nzShape="circle" nz-popover [nzPopoverContent]="colorPicker" nzPopoverTrigger="hover" [ngStyle]="{'background-color': item.BackColour}">&nbsp;</button>
+                            <ng-template #colorPicker>
+                                <swatches-picker [(color)]="item.BackColour"></swatches-picker>
+                            </ng-template>
+                        </td>
+                        <td class="align-middle">
+                            <span *ngIf="!item.IsEditing" class="cell" [ngClass]="access.Update?'enabled-cell':'disabled-cell'" (click)="setIsEditing(item)">
+                                <span *ngIf="item.GanttText">{{ item.GanttText }}</span>
+                                <div *ngIf="!item.GanttText">&nbsp;</div>
+                            </span>
+                            <input *ngIf="item.IsEditing" class="plain-text" nz-input [(ngModel)]="item.GanttText"/>
+                        </td>
+                        <td class="align-middle text-nowrap">
+                            <a *ngIf="access.Delete" nz-button nzType="link" (click)="delete(item)" nzDanger>
+                                <i nz-icon nzType="delete"></i>
+                            </a>
+                            <span class="ml-3" *ngIf="item.IsEditing">
+                                <button type="button" class="mr-3" nz-button nzType="primary" (click)="save(item)">Save</button>
+                                <button type="button" nz-button (click)="cancel(item)">Cancel</button>
+                            </span>
+                        </td>
+                        <td class="align-middle" *ngIf="isModalInput">
+                            <span class="text-red">{{ item.Error }}</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <app-list-status [listStatus]=listStatus.asObservable()></app-list-status>
+    </div>
+</div>

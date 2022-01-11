@@ -1,0 +1,36 @@
+.content {
+  border-radius: 5px;
+  padding: 12px;
+  padding-left: 37px;
+  background-repeat: no-repeat;
+  background-size: 16px;
+  background-position: 11px 13px;
+  font-size: 0.9285714285714286rem;
+  margin-bottom: 8px;
+  display: block;
+  width: 100%;
+}
+
+.info {
+  border: solid 1px #d5e2f5;
+  background-color: #f5f8ff;
+  background-image: url('src/assets/images/info_icon.png');
+}
+
+.success {
+  border: solid 1px #adf2b1;
+  background-color: #f5fff8;
+  background-image: url('src/assets/images/success_icon.png');
+}
+
+.danger {
+  border: solid 1px #f5b9b9;
+  background-color: #fff5f5;
+  background-image: url('src/assets/images/error_icon.png');
+}
+
+.warning {
+  border: solid 1px #d2ad1a;
+  background-color: #fff367;
+  background-image: url('src/assets/images/warning_icon.png');
+}

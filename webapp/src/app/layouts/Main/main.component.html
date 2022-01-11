@@ -1,0 +1,65 @@
+<div id='main_layout_content' [ngClass]="{'cui__layout__grayBackground': isGrayBackground}">
+  <nz-layout [ngClass]="{
+  'cui__layout__contentMaxWidth': isContentMaxWidth,
+  'cui__layout__appMaxWidth': isAppMaxWidth,
+  'cui__layout__grayBackground': isGrayBackground,
+  'cui__layout__squaredBorders': isSquaredBorders,
+  'cui__layout__cardsShadow': isCardShadow,
+  'cui__layout__borderless': isBorderless
+}">
+
+    <div *ngIf="superUser === true">
+      <cui-sidebar></cui-sidebar>  
+    </div>
+    <div *ngIf="chatEnable === true">
+      <!-- <cui-support-chat></cui-support-chat>   -->
+    </div>
+    <nz-header id="main_header" *ngIf="!hideHeader" [ngClass]="{'cui__layout__header': true,'cui__layout__fixedHeader': isTopbarFixed,'cui__layout__headerGray': isGrayTopbar}" class="renderSideNav === false ? 'imh-mw' : ''">
+      <!-- mobile menu with drawer -->
+      <div id="mobile_menu_header">
+        <div *ngIf="isMobileView && renderSideNav">
+          <div class="handler" (click)="toggleMobileMenu()">
+            <div class="handlerIcon"></div>
+          </div>
+          <nz-drawer [nzClosable]="false" [nzWrapClassName]="'mobileMenu'" [nzVisible]="isMobileMenuOpen" nzPlacement="left"
+            (nzOnClose)="toggleMobileMenu()">
+            <cui-menu-left [menuDataActivated]="menuDataActivated"></cui-menu-left>
+          </nz-drawer>
+        </div>
+      </div>
+      <div [ngClass]="isMobileView && renderSideNav ? 'ml-4' : ''">
+        <cui-topbar [renderSideNav]="renderSideNav"></cui-topbar>
+      </div>
+    </nz-header>
+
+    <!-- top menu -->
+    <div *ngIf="menuLayoutType === 'top' && !isMobileView">
+      <cui-menu-top></cui-menu-top>
+    </div>
+    <nz-layout >
+      <!-- left menu -->
+      <!-- FIX: nz-sider wrapper fix layout behaviour in case when cui-menu-left root tag breaks layout transformation -->
+      <span id="web_menu_header">
+        <nz-sider 
+        *ngIf="menuLayoutType === 'left' && !isMobileView && renderSideNav"
+        [nzWidth]="isMenuCollapsed ? 80 : leftMenuWidth"
+        style="transition: none !important">
+        <cui-menu-left [menuDataActivated]="menuDataActivated"></cui-menu-left>
+        </nz-sider>
+      </span>
+      <nz-content [ngClass]="content1Class">
+        <cui-breadcrumbs *ngIf="renderSideNav"></cui-breadcrumbs>
+        <div [ngClass]="content2Class">
+          <div [@slideFadeinUp]="routeAnimation(outlet, 'slideFadeinUp')"
+            [@slideFadeinRight]="routeAnimation(outlet, 'slideFadeinRight')"
+            [@zoomFadein]="routeAnimation(outlet, 'zoomFadein')" [@fadein]="routeAnimation(outlet, 'fadein')">
+            <router-outlet #outlet="outlet" (activate)="onActivate()"></router-outlet>
+          </div>
+        </div>
+      </nz-content>
+    </nz-layout>
+    <nz-footer id="footer_header">
+      <cui-footer [renderSideNav]="renderSideNav"></cui-footer>
+    </nz-footer>
+  </nz-layout>
+</div>
